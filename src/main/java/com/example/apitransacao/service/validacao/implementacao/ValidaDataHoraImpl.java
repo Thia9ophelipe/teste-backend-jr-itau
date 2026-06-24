@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.time.OffsetDateTime;
 
 @Component
-public class validaDataHoraImpl implements ValidarTransacao {
+public class ValidaDataHoraImpl implements ValidarTransacao {
 
     @Override
     public void validar(TransacaoRequestDTO requestDTO) {

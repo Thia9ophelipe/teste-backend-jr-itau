@@ -5,7 +5,6 @@ import com.example.apitransacao.dto.TransacaoRequestDTO;
 import com.example.apitransacao.service.validacao.ValidarTransacao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +12,6 @@ import java.util.List;
 @Slf4j
 @Service
 public class TransacaoService {
-
-
 
     private final List<Transacao> transacoes = new ArrayList<>();
 
