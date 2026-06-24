@@ -14,7 +14,7 @@ public class validaDataHoraImpl implements ValidarTransacao {
     public void validar(TransacaoRequestDTO requestDTO) {
 
         if(requestDTO.dataHora().isAfter(OffsetDateTime.now())){
-            throw new ExceptionDataHoraFutura("A dataHora não pode ser posterior a data presente");
+            throw new ExceptionDataHoraFutura();
         }
     }
 }
