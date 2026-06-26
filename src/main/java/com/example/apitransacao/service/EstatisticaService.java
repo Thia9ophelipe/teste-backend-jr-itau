@@ -4,6 +4,7 @@ import com.example.apitransacao.dto.EstatisticaResponseDTO;
 import com.example.apitransacao.entity.Transacao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.DoubleSummaryStatistics;
@@ -14,7 +15,9 @@ import java.util.List;
 public class EstatisticaService {
 
     private final TransacaoService transacaoService;
+
     public EstatisticaService(TransacaoService transacaoService) {
+
         this.transacaoService = transacaoService;
     }
 

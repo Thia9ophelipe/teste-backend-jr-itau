@@ -3,40 +3,49 @@ package com.example.apitransacao.service.validacao.implementacao;
 import com.example.apitransacao.dto.TransacaoRequestDTO;
 import com.example.apitransacao.exception.ExceptionDataHoraFutura;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.time.OffsetDateTime;
-import java.util.stream.Stream;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
 public class ValidaDataHoraImplTest {
 
-    static Stream<Arguments> preenchimentoDeDatas(){
+    @Nested
+    class validaDataHora {
+        @Test
+        void deveLancarExcecaoDataHoraForFutura() {
+            // ARRANGE
+            OffsetDateTime dataHora = OffsetDateTime.now().plusDays(1);
+            TransacaoRequestDTO dto = new TransacaoRequestDTO(10.0, dataHora);
+            ValidaDataHoraImpl validaDataHora = new ValidaDataHoraImpl();
 
-        OffsetDateTime dataValida = OffsetDateTime.parse("2026-06-24T13:52:00-03:00");
-        OffsetDateTime datainvalida = OffsetDateTime.parse("2050-06-25T13:52:00-03:00");
-        return Stream.of(
-                Arguments.of(dataValida),
-                Arguments.of(datainvalida)
-        );
-    }
+            // ACT
+            ExceptionDataHoraFutura exception = assertThrows(
+                    ExceptionDataHoraFutura.class,
+                    () -> validaDataHora.validar(dto)
+            );
+        }
 
-    @ParameterizedTest
-    @MethodSource("preenchimentoDeDatas")
-    void deveValidarDataHora(OffsetDateTime dataHora) {
+        @Test
+        void naoDeveLancarExcecaoDataHoraForFutura() {
+            // ARRANGE
+            OffsetDateTime dataHora = OffsetDateTime.now().minusDays(1);
+            TransacaoRequestDTO dto = new TransacaoRequestDTO(10.0, dataHora);
+            ValidaDataHoraImpl validaDataHora = new ValidaDataHoraImpl();
 
-        TransacaoRequestDTO transacaoRequestDTO = new TransacaoRequestDTO(10.0, dataHora);
-        ValidaDataHoraImpl validaDataHoraImpl = new ValidaDataHoraImpl();
+            // ACT
+            validaDataHora.validar(dto);
 
-        if(dataHora.isAfter(OffsetDateTime.parse("2026-06-24T13:53:00-03:00"))){
-            assertThrows(ExceptionDataHoraFutura.class, () -> validaDataHoraImpl.validar(transacaoRequestDTO));
-        }else {
-            log.info("dataHora valida");
+            //ASSERT
+            assertTrue(OffsetDateTime.now().isAfter(dataHora));
+
+            log.info("dataHora {} é anterior a data atual {}", dataHora, OffsetDateTime.now());
         }
     }
 }

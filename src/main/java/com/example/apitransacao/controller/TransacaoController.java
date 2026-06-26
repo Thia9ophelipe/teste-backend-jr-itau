@@ -25,6 +25,6 @@ public class TransacaoController {
     @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
     public void excluirTransacao()  {
-        transacaoService.deletarTransacao();
+        transacaoService.deletarTransacoes();
     }
 }

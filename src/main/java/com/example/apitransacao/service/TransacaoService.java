@@ -18,6 +18,7 @@ public class TransacaoService {
     private final List<ValidarTransacao> validacoes;
 
     public TransacaoService(List <ValidarTransacao> validacoes) {
+
         this.validacoes = validacoes;
     }
 
@@ -33,7 +34,7 @@ public class TransacaoService {
         log.info("Transação salva com sucesso!");
     }
 
-    public void deletarTransacao() {
+    public void deletarTransacoes() {
 
         log.info("Iniciando processo de deletar transacao");
         transacoes.clear();
