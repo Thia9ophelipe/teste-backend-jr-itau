@@ -20,6 +20,10 @@ public class GlobalException {
     public void excpetionValorNegativo(){
     }
 
+    @ExceptionHandler(value = ExceptionDataHoraFutura.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public void excpetiondataHoraFutura(){
+    }
 
     @ExceptionHandler(value = HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

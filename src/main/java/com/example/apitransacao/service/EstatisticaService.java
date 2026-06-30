@@ -5,8 +5,11 @@ import com.example.apitransacao.entity.Transacao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
 
@@ -21,9 +24,17 @@ public class EstatisticaService {
         this.transacaoService = transacaoService;
     }
 
+    public static String formatarParaSegundos(long milissegundos) {
+        double segundos = milissegundos / 1000.0;
+
+        return String.format(java.util.Locale.US, "%.3fs", segundos);
+    }
+
     public EstatisticaResponseDTO processarEstatisticas(Integer intervaloEmSegundos) {
 
         log.info("Iniciando processamento de Estatisticas");
+
+        long inicio = System.currentTimeMillis();
 
         OffsetDateTime limite = OffsetDateTime.now(ZoneOffset.UTC).minusSeconds(intervaloEmSegundos);
 
@@ -39,7 +50,13 @@ public class EstatisticaService {
         double min = estatisticas.getCount() > 0 ? estatisticas.getMin() : 0.0;
         double max = estatisticas.getCount() > 0 ? estatisticas.getMax() : 0.0;
 
-        log.info("Estatisticas processadas com sucesso");
+        long fim = System.currentTimeMillis();
+
+        long tempoDeProcessamento = fim - inicio;
+
+        String tempoFormatado = formatarParaSegundos(tempoDeProcessamento);
+
+        log.info("Estatisticas processadas com sucesso em: " + tempoFormatado);
 
         return new EstatisticaResponseDTO(
                 estatisticas.getCount(),
@@ -48,5 +65,5 @@ public class EstatisticaService {
                 min,
                 max
         );
-    }
+    };
 }
